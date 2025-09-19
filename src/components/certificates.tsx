@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Expand, Minimize, Loader2 } from 'lucide-react';
+import { Element } from 'react-scroll';
+import { ChevronLeft, ChevronRight, Expand, Minimize, Loader2, FileText } from 'lucide-react';
 
 interface Certificate {
   title: {
@@ -10,12 +11,40 @@ interface Certificate {
   image: string;
 }
 
-interface CertificateSliderProps {
-  certificates: Certificate[];
+interface CertificatesProps {
   language: 'en' | 'bn';
+  content: any;
+  certificates: Certificate[];
 }
 
-const CertificateSlider = ({ certificates, language }: CertificateSliderProps) => {
+// Professional Layout Component
+const ProfessionalLayout = ({ children, title, icon, className = '' }: {
+  children: React.ReactNode;
+  title: string;
+  icon: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+      className={`professional-card professional-section ${className}`}
+    >
+      <div className="professional-title">
+        <div className="icon-professional">
+          {icon}
+        </div>
+        {title}
+      </div>
+      {children}
+    </motion.section>
+  );
+};
+
+// Certificate Slider Component
+const CertificateSlider = ({ certificates, language }: { certificates: Certificate[], language: 'en' | 'bn' }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -138,79 +167,6 @@ const CertificateSlider = ({ certificates, language }: CertificateSliderProps) =
     return () => clearInterval(timer);
   }, [certificates.length, isAutoPlaying, isLoading]);
 
-  // Fullscreen change listener
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
-  }, []);
-
-  // LinkedIn-style premium dot navigation calculation with 11 dots
-  const getVisibleDots = () => {
-    const maxDots = 11;
-    const total = certificates.length;
-    
-    if (total <= maxDots) {
-      return certificates.map((_, index) => index);
-    }
-    
-    const current = currentIndex;
-    const center = Math.floor(maxDots / 2);
-    
-    let start = Math.max(0, current - center);
-    let end = Math.min(total - 1, current + center);
-    
-    // Adjust if we're near the boundaries
-    if (end - start + 1 < maxDots) {
-      if (start === 0) {
-        end = Math.min(total - 1, maxDots - 1);
-      } else if (end === total - 1) {
-        start = Math.max(0, total - maxDots);
-      }
-    }
-    
-    const dots = [];
-    for (let i = start; i <= end; i++) {
-      dots.push(i);
-    }
-    return dots;
-  };
-
-  const getDotScale = (index: number) => {
-    const visibleDots = getVisibleDots();
-    const position = visibleDots.indexOf(index);
-    const center = Math.floor(visibleDots.length / 2);
-    const distance = Math.abs(position - center);
-    
-    if (index === currentIndex) return 1.2; // Current dot is largest but smaller
-    if (distance === 0) return 1.2;
-    if (distance === 1) return 1.0;
-    if (distance === 2) return 0.8;
-    if (distance === 3) return 0.6;
-    if (distance === 4) return 0.5;
-    return 0.3;
-  };
-
-  const getDotOpacity = (index: number) => {
-    const visibleDots = getVisibleDots();
-    const position = visibleDots.indexOf(index);
-    const center = Math.floor(visibleDots.length / 2);
-    const distance = Math.abs(position - center);
-    
-    if (index === currentIndex) return 1;
-    if (distance === 0) return 1;
-    if (distance === 1) return 0.8;
-    if (distance === 2) return 0.6;
-    if (distance === 3) return 0.4;
-    if (distance === 4) return 0.3;
-    return 0.2;
-  };
-
   // Loading state
   if (isLoading) {
     return (
@@ -251,7 +207,7 @@ const CertificateSlider = ({ certificates, language }: CertificateSliderProps) =
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }} // Faster, smoother transitions
+            transition={{ duration: 0.2, ease: 'easeOut' }}
           >
             {failedImages.has(certificates[currentIndex].image) ? (
               <div className="w-full h-full flex items-center justify-center bg-gray-200 rounded-lg">
@@ -273,9 +229,9 @@ const CertificateSlider = ({ certificates, language }: CertificateSliderProps) =
                   background: 'transparent',
                   filter: isFullscreen ? 'none' : 'drop-shadow(0 4px 12px rgba(0,0,0,0.15))'
                 }}
-                loading="eager" // Eager loading for better performance
-                fetchPriority="high" // High priority for current image
-                decoding="async" // Async decoding for better performance
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 onError={() => {
                   setFailedImages(prev => new Set([...prev, certificates[currentIndex].image]));
                 }}
@@ -337,32 +293,6 @@ const CertificateSlider = ({ certificates, language }: CertificateSliderProps) =
             </button>
           </div>
 
-          {/* LinkedIn-style Premium Dot Navigation with 11 smaller dots */}
-          {certificates.length > 1 && (
-            <div className="flex justify-center mb-2">
-              <div className="flex items-center space-x-2">
-                {getVisibleDots().map((index) => (
-                  <button
-                    key={index}
-                    className={`rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 ${
-                      index === currentIndex 
-                        ? 'bg-green-600' 
-                        : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                    style={{
-                      width: `${getDotScale(index) * 6}px`,
-                      height: `${getDotScale(index) * 6}px`,
-                      opacity: getDotOpacity(index),
-                      transform: `scale(${getDotScale(index)})`,
-                    }}
-                    onClick={() => handleDotClick(index)}
-                    aria-label={`Go to certificate ${index + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Position Counter */}
           <div className="flex justify-center">
             <div className="px-3 py-1 bg-gray-100/80 text-gray-600 text-xs sm:text-sm rounded-full backdrop-blur-sm">
@@ -375,4 +305,20 @@ const CertificateSlider = ({ certificates, language }: CertificateSliderProps) =
   );
 };
 
-export default CertificateSlider;
+const Certificates = ({ language, content, certificates }: CertificatesProps) => {
+  return (
+    <Element name="certificates">
+      <ProfessionalLayout
+        title={content[language].certifications}
+        icon={<FileText className="text-green-600" size={24} />}
+      >
+        <CertificateSlider
+          certificates={certificates}
+          language={language}
+        />
+      </ProfessionalLayout>
+    </Element>
+  );
+};
+
+export default Certificates;

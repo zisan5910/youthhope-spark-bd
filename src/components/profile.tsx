@@ -1,29 +1,17 @@
-
-import { Element } from 'react-scroll';
-import { Download, ScrollText, Search, PenTool } from './icons';
-import { cn } from '../lib/utils';
 import { motion } from 'framer-motion';
+import { Element } from 'react-scroll';
+import { Download, ScrollText, Search, PenTool } from 'lucide-react';
 
-interface ProfileSectionProps {
+interface ProfileProps {
   language: 'en' | 'bn';
   content: any;
   scrollToSection: (section: string) => void;
 }
 
-const ProfileSection = ({
-  language,
-  content,
-  scrollToSection,
-}: ProfileSectionProps) => {
+const Profile = ({ language, content, scrollToSection }: ProfileProps) => {
   return (
     <Element name="profile">
-      <header
-        className={cn(
-          'relative pt-20 pb-16 overflow-hidden',
-          'bg-gradient-to-br from-white via-gray-50 to-gray-100 backdrop-blur-sm',
-          'text-[#0a192f]'
-        )}
-      >
+      <header className="relative pt-20 pb-16 overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 backdrop-blur-sm text-[#0a192f]">
         {/* Subtle animated background elements */}
         <motion.div 
           className="absolute inset-0 opacity-5 pointer-events-none"
@@ -103,12 +91,7 @@ const ProfileSection = ({
                 <motion.a
                   href="/Resume.pdf"
                   download="Md Ridoan Mahmud Zisan.pdf"
-                  className={cn(
-                    'px-6 py-2 rounded-md font-medium flex items-center justify-center gap-2',
-                    'bg-gradient-to-r from-[#64ffda] to-[#52e6c4] text-[#0a192f]',
-                    'hover:shadow-md transition-all',
-                    'relative overflow-hidden'
-                  )}
+                  className="px-6 py-2 rounded-md font-medium flex items-center justify-center gap-2 bg-gradient-to-r from-[#64ffda] to-[#52e6c4] text-[#0a192f] hover:shadow-md transition-all relative overflow-hidden"
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -117,12 +100,7 @@ const ProfileSection = ({
                 </motion.a>
                 <motion.button
                   onClick={() => scrollToSection('certificates')}
-                  className={cn(
-                    'px-6 py-2 rounded-md font-medium flex items-center justify-center gap-2',
-                    'bg-white/90 border border-[#64ffda] text-[#0a192f]',
-                    'hover:bg-[#64ffda]/10 transition-colors',
-                    'backdrop-blur-sm'
-                  )}
+                  className="px-6 py-2 rounded-md font-medium flex items-center justify-center gap-2 bg-white/90 border border-[#64ffda] text-[#0a192f] hover:bg-[#64ffda]/10 transition-colors backdrop-blur-sm"
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -131,12 +109,7 @@ const ProfileSection = ({
                 </motion.button>
                 <motion.button
                   onClick={() => scrollToSection('research')}
-                  className={cn(
-                    'px-6 py-2 rounded-md font-medium flex items-center justify-center gap-2',
-                    'bg-white/90 border border-blue-500 text-blue-600',
-                    'hover:bg-blue-50 transition-colors',
-                    'backdrop-blur-sm'
-                  )}
+                  className="px-6 py-2 rounded-md font-medium flex items-center justify-center gap-2 bg-white/90 border border-blue-500 text-blue-600 hover:bg-blue-50 transition-colors backdrop-blur-sm"
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -145,12 +118,7 @@ const ProfileSection = ({
                 </motion.button>
                 <motion.button
                   onClick={() => scrollToSection('blog')}
-                  className={cn(
-                    'px-6 py-2 rounded-md font-medium flex items-center justify-center gap-2',
-                    'bg-white/90 border border-purple-500 text-purple-600',
-                    'hover:bg-purple-50 transition-colors',
-                    'backdrop-blur-sm'
-                  )}
+                  className="px-6 py-2 rounded-md font-medium flex items-center justify-center gap-2 bg-white/90 border border-purple-500 text-purple-600 hover:bg-purple-50 transition-colors backdrop-blur-sm"
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -166,4 +134,4 @@ const ProfileSection = ({
   );
 };
 
-export default ProfileSection;
+export default Profile;

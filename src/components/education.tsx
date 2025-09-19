@@ -1,11 +1,36 @@
 import { motion } from 'framer-motion';
 import { Element } from 'react-scroll';
 import { GraduationCap, School, ExternalLink, BookOpen } from 'lucide-react';
-import ProfessionalLayout from './ProfessionalLayout';
 
 interface EducationProps {
   language: 'en' | 'bn';
 }
+
+// Professional Layout Component
+const ProfessionalLayout = ({ children, title, icon, className = '' }: {
+  children: React.ReactNode;
+  title: string;
+  icon: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+      className={`professional-card professional-section ${className}`}
+    >
+      <div className="professional-title">
+        <div className="icon-professional">
+          {icon}
+        </div>
+        {title}
+      </div>
+      {children}
+    </motion.section>
+  );
+};
 
 const Education = ({ language }: EducationProps) => {
   const educationHistory = [
@@ -67,7 +92,6 @@ const Education = ({ language }: EducationProps) => {
         title={language === 'en' ? 'Education' : 'শিক্ষা'}
         icon={<BookOpen className="text-emerald-600" size={24} />}
       >
-
         <div className="space-y-6">
           {educationHistory.map((education) => (
             <motion.div
