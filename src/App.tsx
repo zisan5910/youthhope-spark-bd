@@ -63,22 +63,58 @@ function App() {
     { id: 'social-links', icon: <Share2 size={20} />, target: 'footer' }
   ];
 
+  // Handle URL-based routing and deep linking
+  useEffect(() => {
+    const path = window.location.pathname;
+    const section = path.substring(1); // Remove leading slash
+    
+    if (section === 'research') {
+      setCurrentPage('research');
+    } else if (section === 'blog') {
+      setCurrentPage('blog');
+    } else if (section && ['profile', 'education', 'courses', 'experience', 'certificates', 'skills', 'family', 'contact'].includes(section)) {
+      setCurrentPage('home');
+      setActiveSection(section);
+      // Small delay to ensure DOM is ready for scrolling
+      setTimeout(() => {
+        scroller.scrollTo(section, {
+          duration: 800,
+          smooth: true,
+          offset: -64,
+        });
+      }, 100);
+    } else {
+      // Default to home page
+      setCurrentPage('home');
+      setActiveSection('profile');
+    }
+  }, []);
+
+  // Update URL when section changes
+  const updateURL = (section: string, page: string = 'home') => {
+    const newURL = page === 'home' ? `/${section}` : `/${page}`;
+    window.history.pushState({}, '', newURL);
+  };
+
   // Smooth scrolling handler
   const scrollToSection = (section: string) => {
     if (section === 'research') {
       setCurrentPage('research');
+      updateURL('research', 'research');
       // Scroll to top when switching to research page
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     if (section === 'blog') {
       setCurrentPage('blog');
+      updateURL('blog', 'blog');
       // Scroll to top when switching to blog page
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     
     setCurrentPage('home');
+    updateURL(section);
     scroller.scrollTo(section, {
       duration: 800,
       smooth: true,
@@ -91,6 +127,7 @@ function App() {
   const handleBackToHome = () => {
     setCurrentPage('home');
     setActiveSection('profile');
+    updateURL('profile');
     // Scroll to top when going back to home
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -106,11 +143,13 @@ function App() {
         return (
           <>
             {/* Profile Section */}
-            <Profile
-              language={language}
-              content={content as any}
-              scrollToSection={scrollToSection}
-            />
+            <Element name="profile">
+              <Profile
+                language={language}
+                content={content as any}
+                scrollToSection={scrollToSection}
+              />
+            </Element>
 
             {/* Main Content Sections */}
             <main className="container mx-auto px-4 py-12">
@@ -131,11 +170,13 @@ function App() {
                 </Element>
 
                 {/* Certificates Section */}
-                <Certificates
-                  language={language}
-                  content={content}
-                  certificates={certificates}
-                />
+                <Element name="certificates">
+                  <Certificates
+                    language={language}
+                    content={content}
+                    certificates={certificates}
+                  />
+                </Element>
 
                 {/* Skills Section */}
                 <Element name="skills">

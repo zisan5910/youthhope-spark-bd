@@ -17,7 +17,6 @@ import {
   Calendar,
   Globe,
   Coffee,
-  Zap,
   Github,
   Facebook,
   Youtube,
