@@ -14,14 +14,20 @@ export interface BlogPost {
     bn: string;
   };
   type: 'poem' | 'article';
-  imageUrl: string;
-  projectLinks?: {  // নতুন প্রোপার্টি যোগ করা হয়েছে
+  imageUrl?: string;
+  projectLinks?: {
     url: string;
     label: {
       en: string;
       bn: string;
     };
   }[];
+  embeddedContent?: {
+    type: 'facebook' | 'youtube' | 'iframe';
+    src: string;
+    width?: number;
+    height?: number;
+  };
 }
 
 export const blogData: BlogPost[] = [
@@ -51,6 +57,29 @@ export const blogData: BlogPost[] = [
         }
       }
     ]
+  },
+  {
+    id: "facebook-post",
+    title: {
+      en: "Facebook Post - Development Journey",
+      bn: "ফেসবুক পোস্ট - ডেভেলপমেন্ট যাত্রা"
+    },
+    content: {
+      en: "Sharing my development journey and experiences through social media posts.",
+      bn: "সোশ্যাল মিডিয়া পোস্টের মাধ্যমে আমার ডেভেলপমেন্ট যাত্রা এবং অভিজ্ঞতা শেয়ার করছি।"
+    },
+    date: "2024-03-15",
+    author: {
+      en: "Md Ridoan Mahmud Zisan",
+      bn: "মো. রিদোয়ান মাহমুদ জিসান"
+    },
+    type: "article" as const,
+    embeddedContent: {
+      type: "facebook",
+      src: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FDevH0b%2Fposts%2Fpfbid09XbKzB9uU9aQQs6kFsXVeDi7jxkNDPSFdDcwFsv7uRFgEWBcufbpkuR9cN6Mewzul&show_text=true&width=500",
+      width: 500,
+      height: 626
+    }
   },
   {
     id: "dhunathub",
@@ -168,7 +197,7 @@ export const blogData: BlogPost[] = [
     },
     content: {
       en: `YouthHopeBD is a website for a youth organization focused on community development and social activities. This platform serves as a hub for youth engagement, featuring event management, volunteer opportunities, community projects, and educational resources. The website helps connect young people with meaningful social initiatives and provides tools for community organizing and youth development.`,
-      bn: `ইয়ুথহোপবিডি একটি যুব সংগঠনের ওয়েবসাইট যা সম্প্রদায় উন্নয়ন এবং সামাজিক কার্যক্রমে মনোনিবেশ করে। এই প্ল্যাটফর্মটি ইভেন্ট ব্যবস্থাপনা, স্বেচ্ছাসেবক সুযোগ, সম্প্রদায় প্রকল্প এবং শিক্ষামূলক সম্পদ বৈশিষ্ট্যযুক্ত যুব সংযুক্তির একটি হাব হিসেবে কাজ করে। ওয়েবসাইটটি তরুণদের অর্থপূর্ণ সামাজিক উদ্যোগের সাথে সংযুক্ত করতে সাহায্য করে এবং সম্প্রদায় সংগঠন এবং যুব উন্নয়নের জন্য সরঞ্জাম প্রদান করে。`
+      bn: `ইয়ুথহোপবিডি একটি যুব সংগঠনের ওয়েবসাইট যা সম্প্রদায় উন্নয়ন এবং সামাজিক কার্যক্রমে মনোনিবেশ করে। এই প্ল্যাটফর্মটি ইভেন্ট ব্যবস্থাপনা, স্বেচ্ছাসেবক সুযোগ, সম্প্রদায় প্রকল্প এবং শিক্ষামূলক সম্পদ বৈশিষ্ট্যযুক্ত যুব সংযুক্তির একটি হাব হিসেবে কাজ করে। ওয়েবসাইটটি তরুণদের অর্থপূর্ণ সামাজিক উদ্যোগের সাথে সংযুক্ত করতে সাহায্য করে এবং সম্প্রদায় সংগঠন এবং যুব উন্নয়নের জন্য সরঞ্জাম প্রদান করে।`
     },
     date: "2024-10-28",
     author: {

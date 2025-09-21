@@ -50,13 +50,32 @@ const Blog = ({ language }: BlogProps) => {
                     </h2>
                     
                     {/* Content Image */}
-                    <div className="rounded-lg overflow-hidden">
-                      <img 
-                        src={post.imageUrl}
-                        alt={post.title[language]}
-                        className="w-full h-64 object-cover"
-                      />
-                    </div>
+                    {post.imageUrl && (
+                      <div className="rounded-lg overflow-hidden">
+                        <img 
+                          src={post.imageUrl}
+                          alt={post.title[language]}
+                          className="w-full h-64 object-cover"
+                        />
+                      </div>
+                    )}
+
+                    {/* Embedded Content */}
+                    {post.embeddedContent && (
+                      <div className="flex justify-center">
+                        <iframe 
+                          src={post.embeddedContent.src}
+                          width={post.embeddedContent.width || 500}
+                          height={post.embeddedContent.height || 400}
+                          style={{ border: 'none', overflow: 'hidden' }}
+                          scrolling="no"
+                          frameBorder="0"
+                          allowFullScreen={true}
+                          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                          className="rounded-lg shadow-md"
+                        />
+                      </div>
+                    )}
                     
                     <div className="text-gray-700 leading-relaxed whitespace-pre-line">
                       {post.content[language]}
